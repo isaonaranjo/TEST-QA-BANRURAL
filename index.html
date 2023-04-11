@@ -41,42 +41,52 @@
 </body>
 
 <script>
-  let randomNumber = Math.random() * 10;
-
-  const ATTEMPS = 5;
+  
+  let randomNumber = Math.floor(Math.random() * 100) + 1;
+  console.log("El número aleatorio es: " + randomNumber); // Agregue esta línea para imprimir el número aleatorio en la consola
+  const ATTEMPTS = 10;
   const guesses = document.querySelector('.guesses');
   const lastResult = document.querySelector('.lastResult');
-  const lowOrHi = document.querySelector('lowOrHi');
+  //Aqui no se le agrego el puntito
+  const lowOrHi = document.querySelector('.lowOrHi');
   const guessSubmit = document.querySelector('.guessSubmit');
   const guessField = document.querySelector('.guessField');
-
   let guessCount = 1;
   let resetButton;
 
   function checkGuess() {
+  let userGuess = parseInt(guessField.value); // Parseamos el valor ingresado a un número entero
+  if (isNaN(userGuess)) { // Verificamos si no se ingresó un número entero
+    alert('Por favor ingresa un número entero.'); // Mostramos una alerta
+    return; // Salimos de la función sin incrementar el contador de intentos
+  }
 
-    let userGuess = guessField.value;
-    if(guessCount === 1) {
-      guesses.textContent = 'Número aleatorio anterior: ';
-    }
+  // Verificamos si el número ingresado está fuera del rango 1-100
+  if (userGuess < 1 || userGuess > 100) {
+    alert('Por favor ingresa un número entre 1 y 100.'); // Mostramos una alerta
+    return; // Salimos de la función sin incrementar el contador de intentos
+  }
+
+  if (guessCount === 1) {
+    guesses.textContent = 'Número aleatorio anterior: ';
+  }
     guesses.textContent += userGuess + ' ';
-
-    if(userGuess === randomNumber) {
-      lastResult.textContent = '!!!Pérdistes!!!';
-      lastResult.style.backgroundColor = 'black';
+    if(userGuess == randomNumber) {
+      lastResult.textContent = '¡Felicitaciones! Adivinaste el número!';
+      lastResult.style.backgroundColor = 'green';
       lowOrHi.textContent = '';
-      setGameOver();
-    } else if(guessCount === ATTEMPS) {
-      lastResult.textContent = 'Felicitaciones! adivinaste el número!';
+      setGameOver(); 
+    } else if(guessCount == ATTEMPTS) {
+      lastResult.textContent = '¡Perdiste!';
       lastResult.style.backgroundColor = 'red';
       setGameOver();
     } else {
-      lastResult.textContent = 'Incorrecto! ';
-      lastResult.style.backgroundColor = 'green';
+      lastResult.textContent = '¡Incorrecto!';
+      lastResult.style.backgroundColor = 'black';
       if(userGuess < randomNumber) {
-        lowOrHi.textContent = 'El número es mayor!';
+        lowOrHi.textContent = 'El número es mayor.';
       } else if(userGuess > randomNumber) {
-        lowOrHi.textContent = 'El número es menor!';
+        lowOrHi.textContent = 'El número es menor.';
       }
     }
 
@@ -84,7 +94,7 @@
     guessField.value = '';
     guessField.focus();
   }
-  guessSubmit.addeventListener('click', checkGuess);
+  guessSubmit.addEventListener('click', checkGuess);
 
   function setGameOver() {
 	  guessField.disabled = true;
@@ -92,7 +102,7 @@
 	  resetButton = document.createElement('button');
 	  resetButton.textContent = 'Comienza un nuevo juego';
 	  document.body.appendChild(resetButton);
-	  resetButton.addeventListener('click', resetGame);
+	  resetButton.addEventListener('click', resetGame);
   }
 
   function resetGame() {
@@ -111,7 +121,9 @@
 
 	  lastResult.style.backgroundColor = 'white';
 
-	  randomNumber = Math.floor(Math.random()) + 1;
+      randomNumber = Math.floor(Math.random() * 100) + 1;
+      console.log("El número aleatorio es: " + randomNumber); // Agregue esta línea para imprimir el número aleatorio en la consola
+
   }
 </script>
 </html>
